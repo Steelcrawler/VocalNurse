@@ -5,7 +5,7 @@ import os
 from openai import OpenAI
 import time
 from typing import Any
-import pygame.mixer as mixer
+from AudioRecorder import play_audio
 
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))   
@@ -16,22 +16,6 @@ the_nurse = client.beta.assistants.retrieve(assitant_id)
 thread = client.beta.threads.create()
 
 speech_file_path = Path(__file__).parent / "speech.mp3"
-
-import pygame.mixer as mixer
-import time
-
-def play_audio(file_path):
-    mixer.init()
-    mixer.music.load(file_path)
-    mixer.music.play()
-
-    while mixer.music.get_busy():
-        time.sleep(1)
-
-    mixer.quit()
-
-
-
 
 def get_response(current_thread: Any, message: str) -> str:
     """ Gets a response from the assistant given a message
@@ -70,6 +54,7 @@ def have_full_conversation() -> str:
     return output
 
 
-analysis = have_full_conversation()
-print(f"Here is the full analysis: \n \n {analysis}")
+if __name__ == '__main__':
+    analysis = have_full_conversation()
+    print(f"Here is the full analysis: \n \n {analysis}")
 
